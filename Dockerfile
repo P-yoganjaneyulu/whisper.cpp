@@ -1,21 +1,21 @@
 FROM python:3.10
 
-# Install system dependencies
+# 🔧 Install system dependencies: build tools, ffmpeg, curl, cmake
 RUN apt-get update && \
-    apt-get install -y build-essential git curl ffmpeg && \
+    apt-get install -y build-essential git curl ffmpeg cmake && \
     apt-get clean
 
-# Set working directory
+# 📁 Set working directory
 WORKDIR /app
 
-# Copy all files to container
+# 📦 Copy all app files into container
 COPY . .
 
-# Compile Whisper
+# 🧱 Build Whisper.cpp
 RUN make && ./models/download-ggml-model.sh base.en
 
-# Install Python dependencies
+# 🐍 Install Python dependencies
 RUN pip install -r requirements.txt
 
-# Expose the Flask server
+# 🚀 Run the Flask app
 CMD ["python", "app.py"]
